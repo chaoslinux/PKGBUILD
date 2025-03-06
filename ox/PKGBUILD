@@ -1,0 +1,17 @@
+# Maintainer: Chaoslinux <chaostypos@gmail.com>
+
+pkgname=ox
+pkgver=0.7.6
+pkgrel=1
+pkgdesc="An independent Rust text editor that runs in your terminal!"
+arch=(x86_64)
+url="https://github.com/curlpipe/ox"
+license=("GPLv2")
+provides=(${_pkgname})
+conflicts=(${_pkgname})
+source=("${url}/releases/download/${pkgver}/${pkgname}")
+sha256sums=("SKIP")
+
+package() {
+	install -Dm755 "${pkgname}" "${pkgdir}/usr/bin/${pkgname}"
+}
