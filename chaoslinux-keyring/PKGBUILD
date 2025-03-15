@@ -1,0 +1,27 @@
+# Maintainer: Chaoslinux <chaostypos@gmail.com>
+
+pkgname=chaoslinux-keyring
+_pkgname=keyring
+pkgver=0.1.0
+pkgrel=1
+pkgdesc='Chaoslinux keyring'
+arch=('any')
+url='https://github.com/chaoslinux/'
+license=('MIT')
+source=("$pkgname.tar.gz::https://github.com/chaoslinux/$_pkgname/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz")
+validpgpkeys=('97E80E054CE5EA9639CBC570AA46C30B47F38392')
+sha512sums=('c4ae069fee59115ca6b3e6c76c25f34345b2d640e7bc4c017f024774819259463605197181d7638ea83ba85598ae75775e8633e57ad7aa826d383d8b4f1c1c86')
+install="${_pkgname}.install"
+
+pkgver() {
+  curl -s "https://api.github.com/repos/chaoslinux/$_pkgname/releases/latest" |
+    grep -Po '"tag_name": "v\K[0-9.]+'
+}
+
+package() {
+	cd $_pkgname-$pkgver
+	install -vDm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
+	install -Dm644 "chaoslinux.gpg" "$pkgdir/usr/share/pacman/keyrings/chaoslinux.gpg"
+    install -Dm644 "chaoslinux-trusted" "$pkgdir/usr/share/pacman/keyrings/chaoslinux-trusted"
+    install -Dm644 "chaoslinux-revoked" "$pkgdir/usr/share/pacman/keyrings/chaoslinux-revoked"
+}

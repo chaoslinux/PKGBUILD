@@ -1,0 +1,28 @@
+# Maintainer: Chaoslinux <chaostypos@gmail.com>
+
+pkgname=chaoslinux-mirrorlist
+_pkgname=mirrorlist
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Chaoslinux mirrorlist"
+arch=('any')
+url='https://github.com/chaoslinux/'
+license=('MIT')
+options=(!strip !emptydirs)
+conflicts_aarch64=(chaoslinux-arm-mirrorlist)
+conflicts_armv7h=(chaoslinux-arm-mirrorlist)
+source=("$pkgname.tar.gz::https://github.com/chaoslinux/$_pkgname/releases/download/v$pkgver/$_pkgname-$pkgver.tar.gz")
+validpgpkeys=('97E80E054CE5EA9639CBC570AA46C30B47F38392')
+sha512sums=('48ddae79b6f4e487de569047ef6d91a373d9c846d49300d63fd0d4ae5df02ce0bd46333caab7b7bec5ad06fa8da2fc417b54682a47b037a9ef931e2344b8f50c')
+backup=("etc/pacman.d/$pkgname")
+
+pkgver() {
+  curl -s "https://api.github.com/repos/chaoslinux/$_pkgname/releases/latest" |
+    grep -Po '"tag_name": "v\K[0-9.]+'
+}
+
+package() {
+	cd $_pkgname-$pkgver
+	install -vDm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
+    install -Dm644 "$pkgname" "$pkgdir/etc/pacman.d/$pkgname"
+}
